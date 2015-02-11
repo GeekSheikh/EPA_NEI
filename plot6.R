@@ -1,5 +1,7 @@
+#Reference UDFs
 source("./udf.R")
 
+#Define function for building the plot png file
 plot6 <- function(dframes=NULL){
 	packages <- c("dplyr","ggplot2","sqldf")
 	packagechecks <- checkPackages(packages)
@@ -11,12 +13,17 @@ plot6 <- function(dframes=NULL){
 	pmdf <- data.frame(dframes[1])
 	summary <- data.frame(dframes[2])
 
+#Begin Analysis
 	summary.baltimore.la <- subset(summary, summary$fips %in% c("24510", "06037"))
 	summary.baltimore.la <- mutate(summary.baltimore.la, 
 		city = ifelse(fips == "24510", "Baltimore", "LA"))
 
-	scc.mobile <- unlist(sqldf('Select "SCC" from pmdf where "SCC.Level.One" = "Mobile Sources" order by "SCC"'))
-	summary.mobile <- summary.baltimore.la[summary.baltimore.la$SCC %in% scc.mobile & summary.baltimore.la$type=="ON-ROAD", ]
+	scc.mobile <- unlist(sqldf('Select "SCC" 
+		from pmdf 
+		where "SCC.Level.One" = "Mobile Sources" 
+		order by "SCC"'))
+	summary.mobile <- summary.baltimore.la[summary.baltimore.la$SCC %in% scc.mobile 
+		& summary.baltimore.la$type=="ON-ROAD", ]
 
 	mobile.by.year <- aggregate(summary.mobile$Emissions, 
 		by = list(summary.mobile$year), 
@@ -25,7 +32,6 @@ plot6 <- function(dframes=NULL){
 	mobile.by.year <- dplyr::rename(mobile.by.year, 
 		yr = Group.1, 
 		pm25 = x)
-
 
 	# Set bg color transparent
 	par(bg = "transparent")
@@ -53,4 +59,5 @@ plot6 <- function(dframes=NULL){
 	#one would need to take the emissions changes as a 
 	#function of the number of cars on the road
 }
+#Call the Function
 plot6()

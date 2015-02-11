@@ -1,16 +1,21 @@
+#Reference UDFs
 source("./udf.R")
 
+#Define function for building the plot png file
 plot1 <- function(dframes=NULL){
 	packages <- c("dplyr")
 	packagechecks <- checkPackages(packages)
 
+#Get list of data elements
 	if(is.null(dframes)){
 		dframes <- loaddata()
 	}
 
+#extract data frames from list
 	pmdf <- data.frame(dframes[1])
 	summary <- data.frame(dframes[2])
 
+#Begin Analysis
 	emissions.by.year <- aggregate(summary$Emissions, 
 		by = list(summary$year), 
 		FUN = "sum")
@@ -39,5 +44,6 @@ plot1 <- function(dframes=NULL){
 
 }
 
+#Call the Function
 plot1()
 #Answer, YES, emissions have decreased

@@ -1,5 +1,7 @@
+#Reference UDFs
 source("./udf.R")
 
+#Define function for building the plot png file
 plot3 <- function(dframes=NULL){
 	packages <- c("dplyr","ggplot2")
 	packagechecks <- checkPackages(packages)
@@ -10,6 +12,8 @@ plot3 <- function(dframes=NULL){
 
 	pmdf <- data.frame(dframes[1])
 	summary <- data.frame(dframes[2])
+
+#Begin Analysis
 	summary.baltimore <- transform(subset(summary, summary$fips == "24510"), type = factor(type))
 
 	# Set bg color transparent
@@ -34,4 +38,5 @@ plot3 <- function(dframes=NULL){
 
 	#Answer, They all have but nonpoint and point have shown the greatest decreases according to this graph. 
 }
+#Call the Function
 plot3()

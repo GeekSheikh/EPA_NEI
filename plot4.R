@@ -1,5 +1,7 @@
+#Reference UDFs
 source("./udf.R")
 
+#Define function for building the plot png file
 plot4 <- function(dframes=NULL){
 	packages <- c("dplyr","ggplot2","sqldf")
 	packagechecks <- checkPackages(packages)
@@ -11,6 +13,7 @@ plot4 <- function(dframes=NULL){
 	pmdf <- data.frame(dframes[1])
 	summary <- data.frame(dframes[2])
 
+#Begin Analysis
 	scc.coal <- sqldf('Select "SCC" 
 		from pmdf 
 		where "Short.Name" like "%Coal%" 
@@ -46,4 +49,5 @@ plot4 <- function(dframes=NULL){
 
 	#Answer, steadily falling with a minor spike around 2005
 }
+#Call the Function
 plot4()

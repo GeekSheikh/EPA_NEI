@@ -1,5 +1,7 @@
+#Reference UDFs
 source("./udf.R")
 
+#Define function for building the plot png file
 plot2 <- function(dframes=NULL){
 	packages <- c("dplyr")
 	packagechecks <- checkPackages(packages)
@@ -13,7 +15,7 @@ plot2 <- function(dframes=NULL){
 
 	summary.baltimore <- subset(summary, summary$fips == "24510")
 
-
+#Begin Analysis
 	emissions.baltimore.by.year <- aggregate(summary.baltimore$Emissions, 
 		by = list(summary.baltimore$year), 
 		FUN = "sum")
@@ -42,4 +44,5 @@ plot2 <- function(dframes=NULL){
 
 	#Answer, YES, overall they have, but not steadily, there was a spike around 2005
 }
+#Call the Function
 plot2()

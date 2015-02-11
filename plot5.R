@@ -1,5 +1,7 @@
+#Reference UDFs
 source("./udf.R")
 
+#Define function for building the plot png file
 plot5 <- function(dframes=NULL){
 	packages <- c("dplyr","ggplot2","sqldf")
 	packagechecks <- checkPackages(packages)
@@ -11,10 +13,15 @@ plot5 <- function(dframes=NULL){
 	pmdf <- data.frame(dframes[1])
 	summary <- data.frame(dframes[2])
 
+#Begin Analysis
 	summary.baltimore <- subset(summary, summary$fips == "24510")
 
-	scc.mobile <- unlist(sqldf('Select "SCC" from pmdf where "SCC.Level.One" = "Mobile Sources" order by "SCC"'))
-	summary.mobile <- summary.baltimore[summary.baltimore$SCC %in% scc.mobile & summary.baltimore$type=="ON-ROAD", ]
+	scc.mobile <- unlist(sqldf('Select "SCC" 
+		from pmdf 
+		where "SCC.Level.One" = "Mobile Sources" 
+		order by "SCC"'))
+	summary.mobile <- summary.baltimore[summary.baltimore$SCC %in% scc.mobile 
+		& summary.baltimore$type=="ON-ROAD", ]
 
 	mobile.by.year <- aggregate(summary.mobile$Emissions, 
 		by = list(summary.mobile$year), 
@@ -43,4 +50,5 @@ plot5 <- function(dframes=NULL){
 
 	#Answer, They have decreased with the largest decrease from 1999 - 2002
 }
+#Call the Function
 plot5()
