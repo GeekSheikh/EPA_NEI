@@ -1,25 +1,37 @@
-pmdf <- readRDS("data/Source_Classification_Code.rds")
-summary <- readRDS("data/summarySCC_PM25.rds")
+source("./udf.R")
 
+plot3 <- function(dframes=NULL){
+	packages <- c("dplyr","ggplot2")
+	packagechecks <- checkPackages(packages)
 
-summary.baltimore <- transform(subset(summary, summary$fips == "24510"), type = factor(type))
+	if(is.null(dframes)){
+		dframes <- loaddata()
+	}
 
-# Set bg color transparent
-par(bg = "transparent")
+	pmdf <- data.frame(dframes[1])
+	summary <- data.frame(dframes[2])
+	summary.baltimore <- transform(subset(summary, summary$fips == "24510"), type = factor(type))
 
-# Start device
-png(file = "plot3.png", width=1200, height=800)
+	# Set bg color transparent
+	par(bg = "transparent")
 
-# Draw plot 3
-g <- qplot(year, Emissions, 
-	data = summary.baltimore, 
-	geom = c("point","smooth"), 
-	method = "lm", 
-	facets = .~type)
+	# Start device
+	png(file = "plot3.png", width=1200, height=800)
 
-g + geom_point() + coord_cartesian(ylim = (c(0,100)))
+	# Draw plot 3
+	print({
+		g <- qplot(year, Emissions, 
+			data = summary.baltimore, 
+			geom = c("point","smooth"), 
+			method = "lm", 
+			facets = .~type)
 
-# Close the device
-dev.off()
+		g + geom_point() + coord_cartesian(ylim = (c(0,100)))
+	}
+	)
+	# Close the device
+	dev.off()
 
-#Answer, They all have but nonpoint and point have shown the greatest decreases according to this graph. 
+	#Answer, They all have but nonpoint and point have shown the greatest decreases according to this graph. 
+}
+plot3()
